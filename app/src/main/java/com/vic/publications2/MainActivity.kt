@@ -23,7 +23,7 @@ const val BASE_URL = "https://beira.pt"
 @OptIn(DelicateCoroutinesApi::class)
 class MainActivity : AppCompatActivity() {
     lateinit var countDownTimer: CountDownTimer
-    private var seconds = 3L
+    private var seconds = 5L
 
     private var titlesList = mutableListOf<String>()
     private var datesList = mutableListOf<String>()
@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity() {
                 makeAPIRequest()
                 countDownTimer.cancel()
                 tvNoInternetCountDown.visibility = View.GONE
-                this@MainActivity.seconds+=3
+                this@MainActivity.seconds+=5
             }
             override fun onTick(millisUntilFinished: Long) {
                 tvNoInternetCountDown.visibility = View.VISIBLE
