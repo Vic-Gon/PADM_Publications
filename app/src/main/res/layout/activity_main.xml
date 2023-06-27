@@ -15,7 +15,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="0dp"
-        tools:itemCount="17"
+        tools:itemCount="9"
         tools:listitem="@layout/item_layout" />
 
     <View

@@ -4,4 +4,5 @@
     <string name="thumbnail">thumbnail</string>
     <string name="title">Title</string>
     <string name="data">Date</string>
+    <string name="Could_not_connect">Could not connect, trying again in %s seconds</string>
 </resources>

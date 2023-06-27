@@ -5,6 +5,7 @@ import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,11 +22,11 @@ const val BASE_URL = "https://beira.pt"
 
 @OptIn(DelicateCoroutinesApi::class)
 class MainActivity : AppCompatActivity() {
-
     lateinit var countDownTimer: CountDownTimer
+    private var seconds = 3L
 
     private var titlesList = mutableListOf<String>()
-    private var descList = mutableListOf<String>()
+    private var datesList = mutableListOf<String>()
     private var imagesList = mutableListOf<String>()
     private var linksList = mutableListOf<String>()
 
@@ -47,12 +48,12 @@ class MainActivity : AppCompatActivity() {
     private fun setUpRecyclerView() {
         val rvRecyclerView = findViewById<RecyclerView>(R.id.rv_recyclerView)
         rvRecyclerView.layoutManager = LinearLayoutManager(applicationContext)
-        rvRecyclerView.adapter = RecyclerAdapter(titlesList, descList, imagesList, linksList)
+        rvRecyclerView.adapter = RecyclerAdapter(titlesList, datesList, imagesList, linksList)
     }
 
-    private fun addToList(title: String, description: String, image: String, link: String) {
+    private fun addToList(title: String, date: String, image: String, link: String) {
         titlesList.add(title)
-        descList.add(description)
+        datesList.add(date)
         imagesList.add(image)
         linksList.add(link)
     }
@@ -72,7 +73,7 @@ class MainActivity : AppCompatActivity() {
                 val response = api.getNews()
 
                 for (article in response) {
-                    Log.i("MainActivity", "Result = $article")
+                    Log.d("MainActivity", "Result = $article")
                     addToList(article.title, article.date, article.image, article.link)
                 }
 
@@ -83,23 +84,31 @@ class MainActivity : AppCompatActivity() {
                 }
 
             } catch (e: Exception) {
-                Log.e("MainActivity", e.toString())
+                Log.d("MainActivity", e.toString())
 
                 withContext(Dispatchers.Main) {
-                    attemptRequestAgain()
+                    attemptRequestAgain(seconds)
                 }
             }
         }
     }
-    private fun attemptRequestAgain() {
-        countDownTimer = object: CountDownTimer(5000, 1000) {
+
+    private fun attemptRequestAgain(seconds: Long) {
+        countDownTimer = object: CountDownTimer(seconds*1000, 1000) {
+            val tvNoInternetCountDown = findViewById<TextView>(R.id.tv_noInternetCountDown)
+
             override fun onFinish() {
                 makeAPIRequest()
                 countDownTimer.cancel()
+                tvNoInternetCountDown.visibility = View.GONE
+                this@MainActivity.seconds+=3
             }
             override fun onTick(millisUntilFinished: Long) {
-                Log.d("MainActivity", "Could not retrieve data. Trying again in ${millisUntilFinished/1000} seconds")
+                tvNoInternetCountDown.visibility = View.VISIBLE
+                tvNoInternetCountDown.text = getString(R.string.Could_not_connect, "${millisUntilFinished/1000}")
+                Log.d("MainActivity", "Could not connect, trying again in ${millisUntilFinished/1000} seconds")
             }
         }
+        countDownTimer.start()
     }
 }

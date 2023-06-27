@@ -1,6 +1,6 @@
 package com.vic.publications2.api
 
-data class NewsApiJSONItem(
+data class Publicacoes(
     val author: String,
     val categoria: Categoria,
     val concelho: Concelho,
