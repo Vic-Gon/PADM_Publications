@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.vic.publications2.R
 
+@Suppress("DEPRECATION")
 class RecyclerAdapter(
     private var titles: List<String>,
     private var details: List<String>,
@@ -26,7 +27,7 @@ class RecyclerAdapter(
         val itemPicture: ImageView = itemView.findViewById(R.id.iv_image)
 
         init {
-            itemView.setOnClickListener { v: View ->
+            itemView.setOnClickListener { _: View ->
                 val position: Int = adapterPosition
 
                 val intent = Intent(Intent.ACTION_VIEW)

@@ -1,6 +1,5 @@
 package com.vic.publications2
 
-import android.graphics.Color.alpha
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
@@ -10,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vic.publications2.adapters.RecyclerAdapter
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -19,6 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 const val BASE_URL = "https://beira.pt"
 
+@OptIn(DelicateCoroutinesApi::class)
 class MainActivity : AppCompatActivity() {
 
     lateinit var countDownTimer: CountDownTimer
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun fadeInFromBlack() {
-        var vBlackScreen = findViewById<View>(R.id.v_blackScreen)
+        val vBlackScreen = findViewById<View>(R.id.v_blackScreen)
         vBlackScreen.animate().apply {
             alpha(0f)
             duration = 3000
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpRecyclerView() {
-        var rvRecyclerView = findViewById<RecyclerView>(R.id.rv_recyclerView)
+        val rvRecyclerView = findViewById<RecyclerView>(R.id.rv_recyclerView)
         rvRecyclerView.layoutManager = LinearLayoutManager(applicationContext)
         rvRecyclerView.adapter = RecyclerAdapter(titlesList, descList, imagesList, linksList)
     }
@@ -57,7 +58,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun makeAPIRequest() {
-        var progressBar = findViewById<ProgressBar>(R.id.progressBar)
+        val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         progressBar.visibility = View.VISIBLE
 
         val api = Retrofit.Builder()
