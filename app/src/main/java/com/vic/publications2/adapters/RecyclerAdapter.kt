@@ -2,12 +2,14 @@ package com.vic.publications2.adapters
 
 import android.content.Intent
 import android.net.Uri
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.vic.publications2.R
 
 class RecyclerAdapter(
@@ -32,7 +34,6 @@ class RecyclerAdapter(
                 startActivity(itemView.context, intent, null)
             }
         }
-
     }
 
     /**
@@ -58,7 +59,8 @@ class RecyclerAdapter(
      * @see .onBindViewHolder
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
-        TODO("Not yet implemented")
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
+        return ViewHolder(v)
     }
 
     /**
@@ -83,7 +85,12 @@ class RecyclerAdapter(
      * @param position The position of the item within the adapter's data set.
      */
     override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        holder.itemTitle.text = titles[position]
+        holder.itemDetail.text = details[position]
+
+        Glide.with(holder.itemPicture)
+            .load(images[position])
+            .into(holder.itemPicture)
     }
 
     /**
@@ -92,6 +99,6 @@ class RecyclerAdapter(
      * @return The total number of items in this adapter.
      */
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+        return titles.size
     }
 }

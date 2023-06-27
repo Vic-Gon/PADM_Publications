@@ -1,17 +1,33 @@
 package com.vic.publications2
 
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color.alpha
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.vic.publications2.adapters.RecyclerAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 const val BASE_URL = "https://beira.pt"
 
 class MainActivity : AppCompatActivity() {
+
+    lateinit var countDownTimer: CountDownTimer
+
+    private var titlesList = mutableListOf<String>()
+    private var descList = mutableListOf<String>()
+    private var imagesList = mutableListOf<String>()
+    private var linksList = mutableListOf<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -19,7 +35,30 @@ class MainActivity : AppCompatActivity() {
         makeAPIRequest()
     }
 
+    private fun fadeInFromBlack() {
+        var vBlackScreen = findViewById<View>(R.id.v_blackScreen)
+        vBlackScreen.animate().apply {
+            alpha(0f)
+            duration = 3000
+        }.start()
+    }
+
+    private fun setUpRecyclerView() {
+        var rvRecyclerView = findViewById<RecyclerView>(R.id.rv_recyclerView)
+        rvRecyclerView.layoutManager = LinearLayoutManager(applicationContext)
+        rvRecyclerView.adapter = RecyclerAdapter(titlesList, descList, imagesList, linksList)
+    }
+
+    private fun addToList(title: String, description: String, image: String, link: String) {
+        titlesList.add(title)
+        descList.add(description)
+        imagesList.add(image)
+        linksList.add(link)
+    }
+
     private fun makeAPIRequest() {
+        var progressBar = findViewById<ProgressBar>(R.id.progressBar)
+        progressBar.visibility = View.VISIBLE
 
         val api = Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -33,11 +72,33 @@ class MainActivity : AppCompatActivity() {
 
                 for (article in response) {
                     Log.i("MainActivity", "Result = $article")
+                    addToList(article.title, article.date, article.image, article.link)
                 }
-            } catch (e: Exception) {
-                Log.i("MainActivity", e.toString())
-            }
 
+                withContext(Dispatchers.Main) {
+                    setUpRecyclerView()
+                    fadeInFromBlack()
+                    progressBar.visibility = View.GONE
+                }
+
+            } catch (e: Exception) {
+                Log.e("MainActivity", e.toString())
+
+                withContext(Dispatchers.Main) {
+                    attemptRequestAgain()
+                }
+            }
+        }
+    }
+    private fun attemptRequestAgain() {
+        countDownTimer = object: CountDownTimer(5000, 1000) {
+            override fun onFinish() {
+                makeAPIRequest()
+                countDownTimer.cancel()
+            }
+            override fun onTick(millisUntilFinished: Long) {
+                Log.d("MainActivity", "Could not retrieve data. Trying again in ${millisUntilFinished/1000} seconds")
+            }
         }
     }
 }
