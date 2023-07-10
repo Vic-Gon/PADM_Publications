@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ProgressBar
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 
 const val BASE_URL = "https://beira.pt"
 
@@ -41,7 +43,10 @@ class MainActivity : AppCompatActivity() {
 
         val ibAbout = findViewById<ImageButton>(R.id.ib_about)
         ibAbout.setOnClickListener {
-            Toast.makeText(this@MainActivity, "APP developed by: Vicente Gonçalves", Toast.LENGTH_LONG).show()
+            val toast = Toast.makeText(
+                applicationContext, "APP developed by: Vicente Gonçalves", Toast.LENGTH_LONG)
+            toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 0)
+            toast.show()
         }
 
         val ibSubscribe = findViewById<ImageButton>(R.id.ib_subscribe)
