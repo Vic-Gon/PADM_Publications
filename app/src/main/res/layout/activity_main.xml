@@ -19,6 +19,30 @@
         android:contentDescription="@string/header_beira_pt"
         app:srcCompat="@drawable/header_beira" />
 
+    <ImageButton
+        android:id="@+id/ib_about"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ivHeader"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:background="#BB3737"
+        android:contentDescription="@string/about"
+        android:minWidth="32dp"
+        app:srcCompat="@drawable/ic_about" />
+
+    <ImageButton
+        android:id="@+id/ib_subscribe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ivHeader"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/ib_about"
+        android:background="#BB3737"
+        android:contentDescription="@string/subscribe"
+        android:minWidth="48dp"
+        app:srcCompat="@drawable/ic_subscribe" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_recyclerView"
         android:layout_width="wrap_content"

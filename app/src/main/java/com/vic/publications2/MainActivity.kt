@@ -1,12 +1,17 @@
 package com.vic.publications2
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vic.publications2.adapters.RecyclerAdapter
@@ -33,6 +38,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val ibAbout = findViewById<ImageButton>(R.id.ib_about)
+        ibAbout.setOnClickListener {
+            Toast.makeText(this@MainActivity, "APP developed by: Vicente Gonçalves", Toast.LENGTH_LONG).show()
+        }
+
+        val ibSubscribe = findViewById<ImageButton>(R.id.ib_subscribe)
+        ibSubscribe.setOnClickListener { _: View ->
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse("https://beira.pt/subscrever-newsletter/")
+            ContextCompat.startActivity(ibSubscribe.context, intent, null)
+        }
 
         makeAPIRequest()
     }
